@@ -1,0 +1,20 @@
+<!-- templates/register.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Register</h2>
+    <form method="post" class="auth-form">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+
+        <button type="submit">Register</button>
+    </form>
+    <p class="muted">
+        Already have an account? <a href="{{ url_for('login') }}">Login</a>
+    </p>
+</section>
+{% endblock %}

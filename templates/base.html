@@ -1,0 +1,50 @@
+<!-- templates/base.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>AUDEX Pro – NL2SQL Interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1>AUDEX Pro</h1>
+            <p class="subtitle">Natural Language Interface for SQL Databases</p>
+        </div>
+        <nav class="nav">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('index') }}">Query</a>
+                <a href="{{ url_for('connections') }}">Connections</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <section class="flash-container">
+            {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </section>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <small>&copy; 2026 AUDEX Pro – NL2SQL</small>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

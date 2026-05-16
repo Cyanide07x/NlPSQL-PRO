@@ -1,0 +1,101 @@
+<!-- templates/connections.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Database Connections</h2>
+    <form method="post" class="connection-form">
+        <input type="hidden" name="action" value="create">
+        <h3>Add new connection</h3>
+        <div class="grid-2">
+            <div>
+                <label for="name">Connection Name</label>
+                <input id="name" name="name" type="text" required>
+            </div>
+            <div>
+                <label for="host">Host</label>
+                <input id="host" name="host" type="text" value="localhost" required>
+            </div>
+            <div>
+                <label for="port">Port</label>
+                <input id="port" name="port" type="number" value="3306" required>
+            </div>
+            <div>
+                <label for="db_name">Database Name</label>
+                <input id="db_name" name="db_name" type="text" required>
+            </div>
+            <div>
+                <label for="username">DB Username</label>
+                <input id="username" name="username" type="text" required>
+            </div>
+            <div>
+                <label for="password">DB Password</label>
+                <input id="password" name="password" type="password" required>
+            </div>
+        </div>
+        <button type="submit">Add Connection</button>
+    </form>
+</section>
+
+<section class="card">
+    <h3>Your Connections</h3>
+    {% if connections %}
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Host / Port</th>
+            <th>Database</th>
+            <th>Type</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Primary</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for c in connections %}
+            <tr>
+                <form method="post" action="{{ url_for('edit_connection', conn_id=c.id) }}">
+                    <td>
+                        <input type="text" name="name" value="{{ c.name }}">
+                    </td>
+                    <td>
+                        <input type="text" name="host" value="{{ c.host }}" style="width: 120px;">
+                        <input type="number" name="port" value="{{ c.port }}" style="width: 70px;">
+                    </td>
+                    <td>
+                        <input type="text" name="db_name" value="{{ c.db_name }}">
+                    </td>
+                    <td>{{ c.db_type }}</td>
+                    <td>
+                        <input type="text" name="username" value="{{ c.username }}">
+                    </td>
+                    <td>
+                        <input type="password" name="password" placeholder="••••••">
+                    </td>
+                    <td>
+                        {% if c.is_primary %}
+                            <span class="badge">Current</span>
+                        {% else %}
+                            <form method="post" action="{{ url_for('set_primary', conn_id=c.id) }}" style="display:inline;">
+                                <button type="submit">Set Primary</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button type="submit">Save</button>
+                </form>
+                        <form method="post" action="{{ url_for('delete_connection_route', conn_id=c.id) }}" style="display:inline;" onsubmit="return confirm('Delete this connection?');">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="muted">No connections yet. Add one above.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Query Database</h2>
+    <p class="muted">
+        Active connection: <strong>{{ connection_name }}</strong>
+    </p>
+    <form method="post" class="query-form">
+        <label for="query">Enter your question:</label>
+        <input id="query"
+               name="query"
+               type="text"
+               placeholder="e.g. show all students, list students in CSE, show sales by region..."
+               value="{{ nl_query|default('') }}"
+               required>
+        <button type="submit">Ask</button>
+    </form>
+
+    <div class="examples">
+        <p>Examples:</p>
+        <ul>
+            <li>show all students</li>
+            <li>list students in CSE</li>
+            <li>how many students in ECE</li>
+            <li>show grades of student 101</li>
+            <li>list courses in CSE</li>
+        </ul>
+    </div>
+</section>
+
+{% if error %}
+<section class="card error">
+    <h3>Message</h3>
+    <p>{{ error }}</p>
+</section>
+{% endif %}
+
+{% if sql %}
+<section class="card">
+    <h3>Generated SQL</h3>
+    <pre class="sql-box">{{ sql }}</pre>
+</section>
+{% endif %}
+
+{% if rows is not none %}
+<section class="card">
+    <h3>Results</h3>
+    {% if rows %}
+        <table>
+            <thead>
+            <tr>
+                {% for col in columns %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for col in columns %}
+                        <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No rows found.</p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}
