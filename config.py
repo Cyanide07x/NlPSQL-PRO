@@ -9,5 +9,5 @@ class Config:
     SECRET_KEY = "some_random_secret"
     DEBUG = True
 
-    GROQ_API_KEY = "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"  # or your key
+    GROQ_API_KEY = ""  # or your key
     GROQ_MODEL = "llama-3.1-8b-instant"
